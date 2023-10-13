@@ -1,0 +1,67 @@
+package templates
+
+import (
+	"strconv"
+	"github.com/orsanawwad/htmxdemo/internal/services"
+)
+
+templ NotDone() {
+	<svg class="w-3.5 h-3.5 mr-2 text-gray-500 dark:text-gray-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+		<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+	</svg>
+}
+
+templ Done() {
+	<svg class="w-3.5 h-3.5 mr-2 text-green-500 dark:text-green-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+		<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+	</svg>
+}
+
+templ TodosList(todos []services.Todo) {
+	<div hx-get="/todos/list" hx-target="this" hx-trigger="ReloadTodos from:body" hx-swap="outerHTML">
+		<button class="ml-2 rounded-lg bg-cyan-500 p-2 text-white hover:bg-cyan-600" hx-get="/todos/edit" class="btn">Edit</button>
+		<ul class="p-12 list-inside">
+			for _, todo := range todos {
+				<li class="flex items-center">
+					if todo.Done {
+						@Done()
+					} else {
+						@NotDone()
+					}
+					{ todo.Text }
+				</li>
+			}
+		</ul>
+	</div>
+}
+
+templ TodosEdit(todos []services.Todo) {
+	<div hx-get="/todos/edit" hx-target="this" hx-trigger="ReloadTodosEdit from:body" hx-swap="outerHTML">
+		<button class="ml-2 rounded-lg bg-cyan-500 p-2 text-white hover:bg-cyan-600" hx-get="/todos/list" class="btn">Done</button>
+		<ul class="p-12 list-disc">
+			for pos, todo := range todos {
+				<li><button class="px-4 font-semibold text-sm text-red shadow-sm" hx-delete={ "/todos/delete/" + strconv.FormatInt(int64(pos), 10) }>Delete</button>{ todo.Text }</li>
+			}
+		</ul>
+	</div>
+}
+
+templ Todos(todos []services.Todo) {
+	@TodosForm()
+	@TodosList(todos)
+}
+
+templ TodosForm() {
+	<form hx-put="/todos" hx-target="this">
+		<div class="mb-4 flex items-center">
+			<input type="text" name="todo" placeholder="Type" class="w-full rounded-lg border border-gray-400 p-2"/>
+			<button class="ml-2 rounded-lg bg-cyan-500 p-2 text-white hover:bg-cyan-600">Submit</button>
+		</div>
+	</form>
+}
+
+	// <form hx-put="/todos" hx-target="this">
+	// 	<div><label>Todo</label> <input type="text" name="todo" placeholder="Type" class="input input-bordered"/></div>
+	// 	<button class="btn">Submit</button>
+	// </form>
+

@@ -1,0 +1,34 @@
+package templates
+
+templ Index() {
+	<html>
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>Todos</title>
+			<script src="/assets/js/htmx.min.js"></script>
+			<script src="/assets/js/ws.js"></script>
+			<script src="/assets/js/tailwindcss.min.js"></script>
+		</head>
+		<body>
+			<div class="relative flex min-h-screen flex-col justify-center overflow-hidden bg-blue-100 py-6 sm:py-12">
+				<div class="relative bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:max-w-lg sm:rounded-lg sm:px-10">
+					<div hx-get="/todos" hx-trigger="load" hx-swap="outerHTML"></div>
+				</div>
+			</div>
+		</body>
+	</html>
+}
+
+						// <div hx-ext="ws" ws-connect="/ws/connect">
+
+					// <div>
+					// 	<div>
+					// 		<div id="notifications"></div>
+					// 		<div id="chat_room">
+					// 		</div>
+					// 		<form id="form" ws-send>
+					// 			<input name="chat_message" />
+					// 		</form>
+					// 	</div>
+					// </div>
