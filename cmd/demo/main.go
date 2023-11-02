@@ -16,11 +16,13 @@ import (
 
 	"github.com/orsanawwad/htmxdemo/internal/handlers"
 	"github.com/orsanawwad/htmxdemo/internal/services"
+	"github.com/orsanawwad/htmxdemo/internal/database"
 )
 
 func main() {
 
-	ts := services.New()
+	db := database.New()
+	ts := services.New(db)
 	mainHandler := handlers.NewMainHandler()
 	assetsHandler := handlers.NewAssetsHandler()
 	todosHandler := handlers.NewTodosHandler(ts)

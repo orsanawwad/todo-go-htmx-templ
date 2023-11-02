@@ -11,9 +11,9 @@ import (
 
 type TodoService interface {
 	List() ([]services.Todo, error)
-	Create(pos int, val string) error
+	Create(val string) error
 	// Update(pos int, val string, )
-	Delete(pos int) error
+	Delete(id uint) error
 }
 
 type TodosHandler struct {
@@ -66,7 +66,7 @@ func (h *TodosHandler) Routes() chi.Router {
 		if err != nil {
 			http.Error(w, "Failed to delete todo", http.StatusInternalServerError)
 		}
-		h.TodoService.Delete(todoPos)
+		h.TodoService.Delete(uint(todoPos))
 		todos, err := h.TodoService.List()
 		if err != nil {
 			http.Error(w, "Failed to get todos", http.StatusInternalServerError)
@@ -77,7 +77,7 @@ func (h *TodosHandler) Routes() chi.Router {
 	r.Put("/", func(w http.ResponseWriter, r *http.Request) {
 		todoVal := r.FormValue("todo")
 		if (todoVal != "") {
-			h.TodoService.Create(0, todoVal)
+			h.TodoService.Create(todoVal)
 		}
 		w.Header().Set("HX-Trigger", "ReloadTodos, ReloadTodosEdit")
 		templates.TodosForm().Render(r.Context(), w)

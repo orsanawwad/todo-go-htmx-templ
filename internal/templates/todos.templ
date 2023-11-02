@@ -17,17 +17,25 @@ templ Done() {
 	</svg>
 }
 
+templ Delete() {
+    <svg class="w-3.5 h-3.5 mr-2 text-red-500 dark:text-red-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z"/>
+    </svg>
+}
+
 templ TodosList(todos []services.Todo) {
 	<div hx-get="/todos/list" hx-target="this" hx-trigger="ReloadTodos from:body" hx-swap="outerHTML">
 		<button class="ml-2 rounded-lg bg-cyan-500 p-2 text-white hover:bg-cyan-600" hx-get="/todos/edit" class="btn">Edit</button>
-		<ul class="p-12 list-inside">
+		<ul class="p-12 list-inside" hx-swap="none">
 			for _, todo := range todos {
-				<li class="flex items-center">
+				<li class="flex items-center" hx-put="/todos/edit" hx-trigger="click">
+					<div>
 					if todo.Done {
 						@Done()
 					} else {
 						@NotDone()
 					}
+					</div>
 					{ todo.Text }
 				</li>
 			}
@@ -35,12 +43,20 @@ templ TodosList(todos []services.Todo) {
 	</div>
 }
 
+// <button class="px-4 font-semibold text-sm text-red shadow-sm" hx-delete={ "/todos/delete/" + strconv.FormatUint(uint64(todo.ID), 10) }>Delete</button>
 templ TodosEdit(todos []services.Todo) {
 	<div hx-get="/todos/edit" hx-target="this" hx-trigger="ReloadTodosEdit from:body" hx-swap="outerHTML">
 		<button class="ml-2 rounded-lg bg-cyan-500 p-2 text-white hover:bg-cyan-600" hx-get="/todos/list" class="btn">Done</button>
-		<ul class="p-12 list-disc">
-			for pos, todo := range todos {
-				<li><button class="px-4 font-semibold text-sm text-red shadow-sm" hx-delete={ "/todos/delete/" + strconv.FormatInt(int64(pos), 10) }>Delete</button>{ todo.Text }</li>
+		<ul class="p-12 list-inside">
+			for _, todo := range todos {
+				<li class="flex items-center" contenteditable="true">
+					<div class="cursor-pointer"
+						 hx-delete={ "/todos/delete/" + strconv.FormatUint(uint64(todo.ID), 10) }
+						 hx-trigger="click">
+					@Delete()
+					</div>
+					{ todo.Text }
+				</li>
 			}
 		</ul>
 	</div>
