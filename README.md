@@ -1,8 +1,8 @@
-# A Go, A Templ, and HTMX, walked into a bar
+# The templ of HTMX and Go
 
-And said lets build a TODO app
+A TODO project
 
-### How
+### How?
 Install air
 ```
 go install github.com/cosmtrek/air@latest
@@ -22,11 +22,11 @@ Run
 air -c .air.toml
 ```
 
-### But how
+### What?
 
-- templates are in handlers/templates
-- templ converts them to go files with
+- templates are defined in handlers/templates as templ files
+- templ converts templ files to go files with
 
     `templ generate --path ./internal/templates/`
 
-- assets under ./internal/handlers/assets/* are bunbled in ./internal/handlers/assets.go, then exposed as its own route /assets
+- assets under ./internal/handlers/assets/* are bundled using go:embed in ./internal/handlers/assets.go, then exposed as its own route under /assets
