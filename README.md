@@ -1,6 +1,6 @@
 # The templ of HTMX and Go
 
-A TODO project
+A (remarkably basic) TODO project
 
 ### How?
 Install air
