@@ -1,4 +1,4 @@
-# The templ of HTMX and Go
+# Basic TODO GoTH (Go, Templ, HTMX)
 
 A (remarkably basic) TODO project
 
